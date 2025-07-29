@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.bubble.css";
 import "react-quill-new/dist/quill.snow.css";
+import { EditorContainer } from "@/components/EditorContainer";
+import { PreviewPanel } from "@/components/PreviewPanel";
 
 // Load Quill component once and reuse
 const ReactQuill = dynamic(() => import("react-quill-new"), {
@@ -79,7 +81,7 @@ export default function Home() {
   const [wordCount, setWordCount] = useState({ snow: 0, bubble: 0 });
 
   // Calculate word count
-  const getWordCount = (html:string) => {
+  const getWordCount = (html: string) => {
     const text = html.replace(/<[^>]*>/g, "");
     return text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
   };
@@ -146,80 +148,83 @@ export default function Home() {
 
         {/* Editor Container */}
         <div className="transition-all duration-500">
-          {/* Snow Editor */}
           {activeTab === "snow" && (
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-gray-200/50 hover:shadow-3xl transition-all duration-300">
-              <div className="h-2 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center">
-                    <div className="flex space-x-2 mr-4">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-800">
-                      Snow Theme Editor
-                    </h2>
-                  </div>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span>
-                      {snow.replace(/<[^>]*>/g, "").length} characters
-                    </span>
-                    <span>{wordCount.snow} words</span>
-                  </div>
-                </div>
-                <div className="snow-editor-container">
-                  <ReactQuill
-                    value={snow}
-                    onChange={setSnow}
-                    theme="snow"
-                    modules={snowModules}
-                    formats={formats}
-                    placeholder="Start writing your masterpiece..."
-                    className="border-2 border-gray-200 rounded-xl overflow-hidden shadow-inner"
-                    style={{ height: "400px" }}
-                  />
-                </div>
-              </div>
+            <div className="space-y-8">
+              <EditorContainer
+                value={snow}
+                onChange={setSnow}
+                theme="snow"
+                modules={snowModules}
+                formats={formats}
+                placeholder="Start writing your masterpiece..."
+                wordCount={wordCount.snow}
+                charCount={snow.replace(/<[^>]*>/g, "").length}
+                title="Snow Theme Editor"
+                gradient="from-blue-500 to-cyan-500"
+              />
+              <PreviewPanel
+                content={snow}
+                title="Snow Editor Preview"
+                gradient="from-blue-500 to-cyan-500"
+                theme="snow"
+                editorStyles={`
+          .ql-snow .ql-editor {
+            font-family: inherit;
+            font-size: 16px;
+            line-height: 1.6;
+          }
+          .ql-snow .ql-editor h1 { font-size: 2em; }
+          .ql-snow .ql-editor h2 { font-size: 1.5em; }
+          .ql-snow .ql-editor h3 { font-size: 1.17em; }
+          .ql-snow .ql-editor blockquote {
+            border-left: 4px solid #ccc;
+            margin: 1em 0;
+            padding-left: 1em;
+          }
+        `}
+              />
             </div>
           )}
 
-          {/* Bubble Editor */}
           {activeTab === "bubble" && (
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-gray-200/50 hover:shadow-3xl transition-all duration-300">
-              <div className="h-2 bg-gradient-to-r from-purple-500 to-pink-500"></div>
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center">
-                    <div className="flex space-x-2 mr-4">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-800">
-                      Bubble Theme Editor
-                    </h2>
-                  </div>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span>
-                      {bubble.replace(/<[^>]*>/g, "").length} characters
-                    </span>
-                    <span>{wordCount.bubble} words</span>
-                  </div>
-                </div>
-                <div className="bubble-editor-container">
-                  <ReactQuill
-                    value={bubble}
-                    onChange={setBubble}
-                    theme="bubble"
-                    modules={bubbleModules}
-                    formats={formats}
-                    placeholder="Click here and start typing. Select text to see formatting options..."
-                    className="border-2 border-gray-200 rounded-xl p-6 min-h-[400px] bg-gradient-to-br from-gray-50 to-blue-50/30 shadow-inner z-50"
-                  />
-                </div>
-              </div>
+            <div className="space-y-8">
+              <EditorContainer
+                value={bubble}
+                onChange={setBubble}
+                theme="bubble"
+                modules={bubbleModules}
+                formats={formats}
+                placeholder="Click here and start typing. Select text to see formatting options..."
+                wordCount={wordCount.bubble}
+                charCount={bubble.replace(/<[^>]*>/g, "").length}
+                title="Bubble Theme Editor"
+                gradient="from-purple-500 to-pink-500"
+              />
+              <PreviewPanel
+                content={bubble}
+                title="Bubble Editor Preview"
+                gradient="from-purple-500 to-pink-500"
+                theme="bubble"
+                editorStyles={`
+          .ql-bubble .ql-editor {
+            padding: 12px 15px;
+            line-height: 1.8;
+          }
+          .ql-bubble .ql-editor a {
+            text-decoration: underline;
+            color: #06c;
+          }
+          .ql-bubble .ql-editor blockquote {
+            border-left: 4px solid #ccc;
+            margin: 1em 0;
+            padding-left: 1em;
+            color: #666;
+          }
+          .ql-bubble .ql-editor .ql-size-small { font-size: 0.75em; }
+          .ql-bubble .ql-editor .ql-size-large { font-size: 1.5em; }
+          .ql-bubble .ql-editor .ql-size-huge { font-size: 2.5em; }
+        `}
+              />
             </div>
           )}
         </div>
@@ -246,14 +251,14 @@ export default function Home() {
         .bubble-editor-container .ql-tooltip {
           z-index: 1000;
         }
-              .ql-tooltip {
+        .ql-tooltip {
           left: -20px !important;
           z-index: 1000 !important;
         }
-          
-        .ql-tooltip-arrow{
+
+        .ql-tooltip-arrow {
           display: none !important;
-      }
+        }
 
         .snow-editor-split .ql-toolbar,
         .bubble-editor-split .ql-tooltip {
