@@ -1,3 +1,5 @@
+import { QuillModules } from "react-quill-new";
+
 export interface TabOption {
   id: string;
   label: string;
@@ -9,7 +11,7 @@ export interface EditorContainerProps {
   value: string;
   onChange: (value: string) => void;
   theme: "snow" | "bubble";
-  modules: any;
+  modules: QuillModules;
   formats: string[];
   placeholder: string;
   wordCount: number;

@@ -1,23 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.bubble.css";
 import "react-quill-new/dist/quill.snow.css";
 import { EditorContainer } from "@/components/EditorContainer";
 import { PreviewPanel } from "@/components/PreviewPanel";
+import { QuillModules } from "react-quill-new";
 
-// Load Quill component once and reuse
-const ReactQuill = dynamic(() => import("react-quill-new"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-64 bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg animate-pulse flex items-center justify-center">
-      <div className="text-gray-500">Loading editor...</div>
-    </div>
-  ),
-});
 
-const snowModules = {
+const snowModules: QuillModules = {
   toolbar: [
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
     [{ font: [] }],
@@ -38,7 +29,7 @@ const snowModules = {
   ],
 };
 
-const bubbleModules = {
+const bubbleModules: QuillModules = {
   toolbar: [
     ["bold", "italic", "underline", "strike"],
     [{ header: 1 }, { header: 2 }],
